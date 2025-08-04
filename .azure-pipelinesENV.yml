@@ -2,37 +2,46 @@ trigger:
   - main
 
 stages:
-  - stage: Dev
+  - stage: DEV
     jobs:
-      - job: RunDev
+      - deployment: DeployDEV
+        environment: DEV
         pool:
           vmImage: ubuntu-latest
-        environment: DEV
-        steps:
-          - script: echo "Running DEV Stage"
-          - script: uname -a
-          - script: echo "This is DEV"
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - script: echo "Running DEV stage"
+                - script: uname -a
+                - script: echo "Completed DEV"
 
   - stage: UAT
-    dependsOn: Dev
+    dependsOn: DEV
     jobs:
-      - job: RunUAT
+      - deployment: DeployUAT
+        environment: UAT
         pool:
           vmImage: ubuntu-latest
-        environment: UAT
-        steps:
-          - script: echo "Running UAT Stage"
-          - script: uptime
-          - script: echo "This is UAT"
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - script: echo "Running UAT stage"
+                - script: uptime
+                - script: echo "Completed uat"
 
-  - stage: Prod
+  - stage: PROD
     dependsOn: UAT
     jobs:
-      - job: RunProd
+      - deployment: DeployPROD
+        environment: PROD
         pool:
           vmImage: ubuntu-latest
-        environment: PROD
-        steps:
-          - script: echo "Running PROD Stage"
-          - script: whoami
-          - script: echo "This is PROD"
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - script: echo "Running PROD stage"
+                - script: whoami
+                - script: echo "Completed PROD"
