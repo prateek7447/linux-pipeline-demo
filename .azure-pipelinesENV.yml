@@ -1,0 +1,38 @@
+trigger:
+  - main
+
+stages:
+  - stage: Dev
+    jobs:
+      - job: RunDev
+        pool:
+          vmImage: ubuntu-latest
+        environment: DEV
+        steps:
+          - script: echo "Running DEV Stage"
+          - script: uname -a
+          - script: echo "This is DEV"
+
+  - stage: UAT
+    dependsOn: Dev
+    jobs:
+      - job: RunUAT
+        pool:
+          vmImage: ubuntu-latest
+        environment: UAT
+        steps:
+          - script: echo "Running UAT Stage"
+          - script: uptime
+          - script: echo "This is UAT"
+
+  - stage: Prod
+    dependsOn: UAT
+    jobs:
+      - job: RunProd
+        pool:
+          vmImage: ubuntu-latest
+        environment: PROD
+        steps:
+          - script: echo "Running PROD Stage"
+          - script: whoami
+          - script: echo "This is PROD"
