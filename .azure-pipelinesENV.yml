@@ -2,7 +2,7 @@ trigger:
   - main
 
 stages:
-  - stage: DEV
+  - stage: Dev
     jobs:
       - deployment: DeployDEV
         environment: DEV
@@ -16,7 +16,7 @@ stages:
                 - script: uname -a
                 - script: echo "Completed DEV"
 
-  - stage: UAT
+  - stage: Uat
     dependsOn: DEV
     jobs:
       - deployment: DeployUAT
@@ -31,7 +31,7 @@ stages:
                 - script: uptime
                 - script: echo "Completed uat"
 
-  - stage: PROD
+  - stage: Prod
     dependsOn: UAT
     jobs:
       - deployment: DeployPROD
